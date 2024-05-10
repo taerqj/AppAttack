@@ -145,105 +145,66 @@ main() {
         case $choice in
             1)
                 read -p "Enter directory to scan (current directory ./): " directory
-                osv-scanner scan "$directory"$output
+                cd /home/kali/go/bin/
+                eval ./osv-scanner scan "$directory"$output
+                echo -e "${GREEN}Done!.${NC}"
                 ;;
             2)
-                read -p "Select Snyk option:
-                1) Run code test locally
-                2) Monitor for vulnerabilities and see results in Snyk UI
-                Enter your choice (1/2): " snyk_option
-
-                case $snyk_option in
-                    1)
-                        read -p "Enter directory to scan (current directory ./): " directory
-                        snyk code test $directory$output
-                        ;;
-                    2)
-                        read -p "Enter directory to scan (current directory ./): " directory
-                        snyk monitor $directory --all-projects$output
-                        ;;
-                    *)
-                        echo -e "${RED}Invalid choice!${NC}"
-                        ;;
-                esac
+                cd /home/kali/doubtfire-deploy
+                eval snyk code test$output
+                echo -e "${GREEN}Done!.${NC}"
                 ;;
             3)
-                sudo brakeman --force$output
+                eval sudo brakeman --force$output
+                echo -e "${GREEN}Done!.${NC}"
                 ;;
             4)
-                read -p "Enter URL to scan: " url
-                nmap -v -A "$url"$output
+                read -p "Enter a hostname or IP address to scan: " url
+                read -p "Enter a port to scan: " port
+                eval nmap -p "$port" -v -A "$url"$output
+                echo -e "${GREEN}Done!.${NC}"
                 ;;
             5)
                 read -p "Enter URL to scan: " url
-                nikto -h "$url"$output
+                eval nikto -h "$url"$output
+                echo -e "${GREEN}Done!.${NC}"
                 ;;
             6)
                 if [[ "$output_to_file" == "y" ]]; then
                     echo -e "${YELLOW}Running osv-scanner...${NC}"
                     read -p "Enter directory to scan (current directory ./): " directory
-                    osv-scanner scan "$directory" > /home/kali/osv-scanner-results.txt
+                    cd /home/kali/go/bin/
+                    eval ./osv-scanner scan "$directory" > /home/kali/osv-scanner-results.txt
                     echo -e "${YELLOW}Running snyk...${NC}"
-                    read -p "Select Snyk option:
-                    1) Run code test locally
-                    2) Monitor for vulnerabilities and see results in Snyk UI
-                    Enter your choice (1/2): " snyk_option
-
-                    case $snyk_option in
-                        1)
-                            read -p "Enter directory to scan (current directory ./): " directory
-                            snyk code test $directory > /home/kali/snyk-results.txt
-                            ;;
-                        2)
-                            read -p "Enter directory to scan (current directory ./): " directory
-                            snyk monitor $directory --all-projects > /home/kali/snyk-results.txt
-                            ;;
-                        *)
-                            echo -e "${RED}Invalid choice!${NC}"
-                            ;;
-                    esac
+                    cd /home/kali/doubtfire-deploy
+                    eval snyk code test > /home/kali/snyk-results.txt
                     echo -e "${YELLOW}Running brakeman...${NC}"
                     sudo brakeman --force > /home/kali/brakeman-results.txt
                     echo -e "${YELLOW}Running nmap...${NC}"
                     read -p "Enter a hostname or IP address to scan: " url
                     read -p "Enter a port to scan: " port
-                    nmap -p "$port" -v -A "$url" > /home/kali/nmap-results.txt
+                    eval nmap -p "$port" -v -A "$url" > /home/kali/nmap-results.txt
                     echo -e "${YELLOW}Running nikto...${NC}"
                     read -p "Enter URL to scan: " url
-                    nikto -h "$url" > /home/kali/nikto-results.txt
+                    eval nikto -h "$url" > /home/kali/nikto-results.txt
                     echo -e "${GREEN}Done!.${NC}"
                 else
                     echo -e "${YELLOW}Running osv-scanner...${NC}"
                     read -p "Enter directory to scan (current directory ./): " directory
-                    osv-scanner scan "$directory"
+                    cd /home/kali/go/bin/
+                    eval ./osv-scanner scan "$directory"
                     echo -e "${YELLOW}Running snyk...${NC}"
-                    read -p "Select Snyk option:
-                    1) Run code test locally
-                    2) Monitor for vulnerabilities and see results in Snyk UI
-                    Enter your choice (1/2): " snyk_option
-
-                    case $snyk_option in
-                        1)
-                            read -p "Enter directory to scan (current directory ./): " directory
-                            snyk code test $directory
-                            ;;
-                        2)
-                            read -p "Enter directory to scan (current directory ./): " directory
-                            snyk monitor $directory --all-projects
-                            ;;
-                        *)
-                            echo -e "${RED}Invalid choice!${NC}"
-                            ;;
-                    esac
+                    cd /home/kali/doubtfire-deploy
+                    eval snyk code test
                     echo -e "${YELLOW}Running brakeman...${NC}"
-                    sudo brakeman --force
+                    eval sudo brakeman --force
                     echo -e "${YELLOW}Running nmap...${NC}"
                     read -p "Enter a hostname or IP address to scan: " url
                     read -p "Enter a port to scan: " port
-                    nmap -p "$port" -v -A "$url"
+                    eval nmap -p "$port" -v -A "$url"
                     echo -e "${YELLOW}Running nikto...${NC}"
                     read -p "Enter URL to scan: " url
-                    nikto -h "$url"
+                    eval nikto -h "$url"
                     echo -e "${GREEN}Done!.${NC}"
                 fi
                 ;;
@@ -256,6 +217,7 @@ main() {
                 ;;
         esac
     done
+
 }
 
 # Run the main function
